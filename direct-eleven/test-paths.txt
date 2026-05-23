@@ -1,0 +1,5 @@
+/Volumes/simons-enjoyment/persian-asr/scribe-jobs/scribe-20-per-dataset-20260516T2332Z/audio/train/asr_farsi_youtube__00000120__419703280662d74b.flac
+/Volumes/simons-enjoyment/persian-asr/scribe-jobs/scribe-20-per-dataset-20260516T2332Z/audio/train/asr_farsi_youtube__00000121__d9228bf1ecc9a1ac.flac
+/Volumes/simons-enjoyment/persian-asr/scribe-jobs/scribe-20-per-dataset-20260516T2332Z/audio/train/asr_farsi_youtube__00000122__194a1af7151dffd9.flac
+/Volumes/simons-enjoyment/persian-asr/scribe-jobs/scribe-20-per-dataset-20260516T2332Z/audio/train/asr_farsi_youtube__00000123__6e47f5e4f5b22d05.flac
+/Volumes/simons-enjoyment/persian-asr/scribe-jobs/scribe-20-per-dataset-20260516T2332Z/audio/train/asr_farsi_youtube__00000124__af8019995c3cb8db.flac

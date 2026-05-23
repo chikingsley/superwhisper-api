@@ -1,0 +1,57 @@
+[project]
+name = "super-whisperer-cli"
+version = "0.1.0"
+description = "Batch-open audio files in Superwhisper and route transcript rows."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+super-whisperer = "super_whisperer_cli.cli:main"
+super-whisperer-workers = "super_whisperer_cli.workers:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.12",
+    "ty>=0.0.35",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+extend-select = [
+    "F",    # Pyflakes
+    "W",    # pycodestyle warnings
+    "E",    # pycodestyle errors
+    "I",    # import sorting
+    "UP",   # Python version upgrades
+    "B",    # likely bugs and footguns
+    "C90",  # complexity
+    "C4",   # comprehensions
+    "FA",   # future annotations
+    "ISC",  # implicit string concatenation
+    "ICN",  # import conventions
+    "RET",  # return practices
+    "SIM",  # simplifications
+    "TID",  # tidy imports
+    "TC",   # type-checking imports
+    "PTH",  # pathlib usage
+    "PLW",  # pylint warnings
+    "RUF",  # Ruff-specific rules
+    "TD",   # TODO discipline
+    "FURB", # refurb
+]
+
+[tool.ruff.lint.per-file-ignores]
+"direct-eleven/transcribe.py" = ["C901"]
+"direct-eleven/transcribe-output.py" = ["C901"]
+"src/super_whisperer_cli/cli.py" = ["C901"]
+
+[tool.ty.rules]
+unused-ignore-comment = "error"
