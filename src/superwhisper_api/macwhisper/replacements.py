@@ -23,6 +23,8 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:
     import argparse
 
+from pydantic import BaseModel, TypeAdapter, ValidationError
+
 from superwhisper_api.audio.models import audio_model
 from superwhisper_api.audio.transcribe import create_process_fn
 
@@ -32,6 +34,19 @@ SCRIBE_MODEL = "scribe-v2"
 MACWHISPER_DB = Path.home() / "Library/Application Support/MacWhisper/Database/main.sqlite"
 MACWHISPER_MEDIA_DIR = Path.home() / "Library/Application Support/MacWhisper/Database/ExternalMedia"
 MACWHISPER_DEFAULTS_DOMAIN = "com.goodsnooze.MacWhisper"
+
+
+class ReplacementPair(BaseModel):
+    """One Global Replace entry: spoken text -> what it should become."""
+
+    original: str
+    replacement: str
+
+
+# Validators for the JSON payloads accepted by the `apply` and `remove` commands.
+# TypeAdapter validates a bare top-level list (no wrapping model needed).
+_PAIRS_ADAPTER = TypeAdapter(list[ReplacementPair])
+_ORIGINALS_ADAPTER = TypeAdapter(list[str])
 
 
 # --- MacWhisper history (read-only) ---------------------------------------
@@ -258,9 +273,9 @@ def _cmd_apply(args: argparse.Namespace) -> int:
 def _cmd_remove(args: argparse.Namespace) -> int:
     """Remove replacements by original (JSON array of strings) from MacWhisper."""
     try:
-        originals = _parse_originals(args.originals)
-    except (ValueError, json.JSONDecodeError) as exc:
-        print(f"Error: {exc}", file=sys.stderr)
+        originals = _ORIGINALS_ADAPTER.validate_json(args.originals)
+    except ValidationError as exc:
+        print(f"Error: invalid originals list:\n{exc}", file=sys.stderr)
         return 1
     if not originals:
         print("Nothing to remove.", file=sys.stderr)

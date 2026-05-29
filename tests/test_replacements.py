@@ -141,3 +141,23 @@ def test_apply_rejects_wrong_shape(store):
 
 def test_remove_rejects_bad_json(store):
     assert R._cmd_remove(argparse.Namespace(originals="{}")) == 1
+
+
+def test_apply_rejects_wrong_field_type(store):
+    # Pydantic enforces the declared types: replacement must be a string.
+    bad = json.dumps([{"original": "x", "replacement": 5}])
+    assert R._cmd_apply(argparse.Namespace(pairs=bad)) == 1
+    assert store["items"] == []
+
+
+def test_apply_ignores_extra_keys(store):
+    # Extra keys in a pair are dropped, not stored (Pydantic default).
+    payload = json.dumps([{"original": "Deep Gram", "replacement": "Deepgram", "junk": 1}])
+    assert R._cmd_apply(argparse.Namespace(pairs=payload)) == 0
+    assert len(store["items"]) == 1
+    assert set(store["items"][0]) == {"id", "original", "replacement"}
+
+
+def test_remove_rejects_non_string_entry(store):
+    # originals must be a list of strings; a number is rejected.
+    assert R._cmd_remove(argparse.Namespace(originals=json.dumps(["ok", 7]))) == 1
