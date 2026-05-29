@@ -15,6 +15,7 @@ import json
 import sqlite3
 import subprocess
 import sys
+import tempfile
 import uuid
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -98,19 +99,36 @@ def _read_global_replace_items() -> list[dict[str, str]]:
 
 
 def _write_global_replace_items(items: list[dict[str, str]]) -> None:
-    """Write the Global Replace list back into MacWhisper's preferences."""
+    """Write the Global Replace list back into MacWhisper's preferences.
+
+    Each entry is stored as a JSON *string*, so globalReplaceList is an array of
+    strings. We edit an exported plist with ``plutil`` (which treats the value as
+    JSON) and import it back, rather than ``defaults write -array`` (which would
+    try to parse each ``{...}`` element as a nested plist and fail).
+    """
     encoded = [json.dumps(item, separators=(",", ":"), ensure_ascii=False) for item in items]
-    subprocess.run(
-        [
-            "defaults",
-            "write",
-            MACWHISPER_DEFAULTS_DOMAIN,
-            "globalReplaceList",
-            "-array",
-            *encoded,
-        ],
-        check=True,
-    )
+    with tempfile.TemporaryDirectory() as tmpdir:
+        plist = Path(tmpdir) / "MacWhisper.plist"
+        subprocess.run(
+            ["defaults", "export", MACWHISPER_DEFAULTS_DOMAIN, str(plist)],
+            check=True,
+            capture_output=True,
+        )
+        subprocess.run(
+            [
+                "plutil",
+                "-replace",
+                "globalReplaceList",
+                "-json",
+                json.dumps(encoded, ensure_ascii=False),
+                str(plist),
+            ],
+            check=True,
+        )
+        subprocess.run(
+            ["defaults", "import", MACWHISPER_DEFAULTS_DOMAIN, str(plist)],
+            check=True,
+        )
 
 
 def _merge_items(
