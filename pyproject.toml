@@ -69,5 +69,8 @@ extend-select = [
 "tests/**/*.py" = ["D100", "D101", "D102", "D103", "D104", "D107"]
 "scripts/**/*.py" = ["D100", "D101", "D102", "D103", "D104", "D107", "E501", "F541", "RUF010"]
 
+[tool.ty.src]
+exclude = ["archive"]
+
 [tool.ty.rules]
 unused-ignore-comment = "error"

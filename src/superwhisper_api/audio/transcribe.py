@@ -101,7 +101,8 @@ def failure_from_exception(audio_path: str, exc: Exception) -> Failure:
     )
 
 
-ExtractFn = Callable[[dict[str, Any]], "str | float | None"]
+TranscriptFn = Callable[[dict[str, Any]], "str | None"]
+DurationFn = Callable[[dict[str, Any]], "float | None"]
 KeyFn = Callable[[], str]
 ProcessFn = Callable[[Path], TranscriptResult]
 
@@ -113,9 +114,9 @@ def transcribe_file(
     model: str,
     language: str | None,
     transcribe_raw: Callable[..., dict[str, Any]],
-    extract_transcript: ExtractFn,
-    extract_duration: ExtractFn,
-    extract_recording_id: ExtractFn,
+    extract_transcript: TranscriptFn,
+    extract_duration: DurationFn,
+    extract_recording_id: TranscriptFn,
     api_key: str | None = None,
     ensure_key: KeyFn | None = None,
 ) -> TranscriptResult:
@@ -332,9 +333,9 @@ class _Provider:
     """How to call one audio provider and pull fields from its response."""
 
     transcribe_raw: Callable[..., dict[str, Any]]
-    extract_transcript: ExtractFn
-    extract_duration: ExtractFn
-    extract_recording_id: ExtractFn
+    extract_transcript: TranscriptFn
+    extract_duration: DurationFn
+    extract_recording_id: TranscriptFn
     ensure_key: KeyFn | None = None
 
 
