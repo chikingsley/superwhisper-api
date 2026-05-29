@@ -1,1 +1,0 @@
-"""Super Whisperer CLI."""

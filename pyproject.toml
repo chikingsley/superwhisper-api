@@ -1,21 +1,34 @@
 [project]
-name = "super-whisperer-cli"
+name = "superwhisper-api"
 version = "0.1.0"
 description = "Batch-open audio files in Superwhisper and route transcript rows."
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "fastapi>=0.136.3",
+    "httpx>=0.28.1",
+    "jsonschema>=4.25.1",
+    "python-multipart>=0.0.29",
+    "uvicorn>=0.48.0",
+]
 
 [project.scripts]
-super-whisperer = "super_whisperer_cli.cli:main"
-super-whisperer-workers = "super_whisperer_cli.workers:main"
+superwhisper-audio = "superwhisper_api.audio.cli:main"
+superwhisper-macwhisper = "superwhisper_api.macwhisper.cli:main"
+superwhisper-macwhisper-proxy = "superwhisper_api.macwhisper.proxy:main"
+superwhisper-new-model-inspect = "superwhisper_api.new_model_inspect:main"
+superwhisper-text = "superwhisper_api.text.cli:main"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/superwhisper_api"]
+
 [dependency-groups]
 dev = [
+    "pytest>=9.0.1",
     "ruff>=0.15.12",
     "ty>=0.0.35",
 ]
@@ -23,8 +36,10 @@ dev = [
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+exclude = [".opencode"]
 
 [tool.ruff.lint]
+ignore = ["D203", "D213"]
 extend-select = [
     "F",    # Pyflakes
     "W",    # pycodestyle warnings
@@ -46,12 +61,13 @@ extend-select = [
     "RUF",  # Ruff-specific rules
     "TD",   # TODO discipline
     "FURB", # refurb
+    "D",    # pydocstyle (docstrings)
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"direct-eleven/transcribe.py" = ["C901"]
-"direct-eleven/transcribe-output.py" = ["C901"]
-"src/super_whisperer_cli/cli.py" = ["C901"]
+"archive/**/*.py" = ["C901", "D100", "D101", "D102", "D103", "D104", "D107"]
+"tests/**/*.py" = ["D100", "D101", "D102", "D103", "D104", "D107"]
+"scripts/**/*.py" = ["D100", "D101", "D102", "D103", "D104", "D107", "E501", "F541", "RUF010"]
 
 [tool.ty.rules]
 unused-ignore-comment = "error"

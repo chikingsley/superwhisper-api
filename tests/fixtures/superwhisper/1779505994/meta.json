@@ -1,0 +1,130 @@
+{
+  "modelKey" : "sw-elevenlabs-scribe",
+  "realtimeEnabled" : false,
+  "systemAudioEnabled" : false,
+  "prompt" : "",
+  "rawResult" : "الان توپای منه و نه توی شکم ماهی تو. باهاش راه رفتن بهتر از بلعیدنش هست",
+  "modelName" : "Scribe (Cloud)",
+  "segments" : [
+    {
+      "start" : 1.019,
+      "end" : 1.459,
+      "text" : "الان"
+    },
+    {
+      "start" : 1.5,
+      "end" : 1.919,
+      "text" : "توپای"
+    },
+    {
+      "text" : "منه",
+      "end" : 2.519,
+      "start" : 2.139
+    },
+    {
+      "text" : "و",
+      "end" : 3.659,
+      "start" : 3.539
+    },
+    {
+      "text" : "نه",
+      "end" : 4,
+      "start" : 3.819
+    },
+    {
+      "text" : "توی",
+      "end" : 4.46,
+      "start" : 4.219
+    },
+    {
+      "text" : "شکم",
+      "end" : 5.199,
+      "start" : 4.679
+    },
+    {
+      "text" : "ماهی",
+      "end" : 5.639,
+      "start" : 5.239
+    },
+    {
+      "text" : "تو.",
+      "end" : 6.079,
+      "start" : 5.839
+    },
+    {
+      "text" : "باهاش",
+      "end" : 7.239,
+      "start" : 6.859
+    },
+    {
+      "text" : "راه",
+      "end" : 7.419,
+      "start" : 7.299
+    },
+    {
+      "text" : "رفتن",
+      "start" : 7.48,
+      "end" : 8.139
+    },
+    {
+      "text" : "بهتر",
+      "start" : 8.199,
+      "end" : 8.539
+    },
+    {
+      "text" : "از",
+      "start" : 8.599,
+      "end" : 8.739
+    },
+    {
+      "text" : "بلعیدنش",
+      "start" : 8.84,
+      "end" : 9.479
+    },
+    {
+      "text" : "هست",
+      "start" : 9.539,
+      "end" : 9.82
+    }
+  ],
+  "applicationContextEnabled" : false,
+  "languageModelName" : "",
+  "separateSpeakersEnabled" : false,
+  "languageSelected" : "auto",
+  "duration" : 10496,
+  "languageModelKey" : "",
+  "recordingDevice" : "",
+  "translationEnabled" : false,
+  "appVersion" : "2.14.0",
+  "speakers" : [
+
+  ],
+  "promptContext" : {
+    "systemContext" : {
+      "language" : "en",
+      "time" : ""
+    },
+    "userContext" : {
+
+    },
+    "modeContext" : {
+      "language" : "en",
+      "examples" : [
+
+      ],
+      "type" : "custom"
+    },
+    "applicationContext" : {
+      "name" : "Codex",
+      "nouns" : [
+
+      ],
+      "includeInPrompt" : false
+    }
+  },
+  "datetime" : "2026-05-23T03:13:14",
+  "literalPunctuationEnabled" : false,
+  "processingTime" : 748,
+  "result" : "الان توپای منه و نه توی شکم ماهی تو. باهاش راه رفتن بهتر از بلعیدنش هست",
+  "modeName" : "Default"
+}

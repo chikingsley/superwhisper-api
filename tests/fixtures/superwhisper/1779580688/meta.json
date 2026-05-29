@@ -1,0 +1,55 @@
+{
+  "datetime" : "2026-05-23T23:58:08",
+  "literalPunctuationEnabled" : false,
+  "result" : "",
+  "modelName" : "S1-Voice (Cloud)",
+  "duration" : 1000,
+  "processingTime" : 27,
+  "languageModelKey" : "",
+  "modelKey" : "sv-1",
+  "separateSpeakersEnabled" : false,
+  "promptContext" : {
+    "systemContext" : {
+      "time" : "",
+      "language" : "en"
+    },
+    "applicationContext" : {
+      "includeInPrompt" : false,
+      "name" : "superwhisper",
+      "nouns" : [
+
+      ]
+    },
+    "modeContext" : {
+      "examples" : [
+
+      ],
+      "type" : "custom",
+      "language" : "en"
+    },
+    "userContext" : {
+
+    }
+  },
+  "speakers" : [
+
+  ],
+  "realtimeEnabled" : false,
+  "appVersion" : "2.14.0",
+  "recordingDevice" : "",
+  "languageModelName" : "",
+  "prompt" : "",
+  "applicationContextEnabled" : false,
+  "modeName" : "Voice to text",
+  "systemAudioEnabled" : false,
+  "languageSelected" : "en",
+  "segments" : [
+    {
+      "text" : "",
+      "end" : 1,
+      "start" : 0
+    }
+  ],
+  "rawResult" : "",
+  "translationEnabled" : false
+}

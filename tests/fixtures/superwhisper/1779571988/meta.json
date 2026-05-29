@@ -1,0 +1,330 @@
+{
+  "duration" : 201683,
+  "modelKey" : "nvidia_parakeet-v3_494MB",
+  "appVersion" : "2.14.0",
+  "separateSpeakersEnabled" : false,
+  "prompt" : "",
+  "languageModelName" : "",
+  "languageModelKey" : "",
+  "literalPunctuationEnabled" : false,
+  "datetime" : "2026-05-23T21:33:08",
+  "realtimeEnabled" : false,
+  "systemAudioEnabled" : false,
+  "modelName" : "Parakeet Multilanguage",
+  "applicationContextEnabled" : false,
+  "promptContext" : {
+    "applicationContext" : {
+      "name" : "Codex",
+      "nouns" : [
+
+      ],
+      "includeInPrompt" : false
+    },
+    "userContext" : {
+
+    },
+    "systemContext" : {
+      "time" : "",
+      "language" : "en"
+    },
+    "modeContext" : {
+      "type" : "custom",
+      "examples" : [
+
+      ],
+      "language" : "en"
+    }
+  },
+  "translationEnabled" : false,
+  "speakers" : [
+
+  ],
+  "recordingDevice" : "AppleUSBAudioEngine:RØDE:Wireless GO II RX:22470115:2",
+  "languageSelected" : "auto",
+  "rawResult" : " Okay, just so I can und um it's not so I can understand. Um so for like the first function. We're just gonna go function by function because I'm like, wait, do we actually need this shit or are you is it just like we're second dick or we're just doing extra shit for no reason? Um so we're gonna have to defend each of these. Like the first function um on row 34, the cash row, what's this? And why do we have this here? Um I'm uh because I'm not understanding like uh yeah I'm not understanding like like what do we actually need here? It's like what do we literally actually need here Um for the signed headers, like we need to send signed headers, I think, but what is this like again man uh um Man, I the code always is like doing uh like liter you know why what is this for loop in the in the signed headers thing like do we need this stuff? I mean like literally When I say do we need it, it's like are is this just like protecting against like God coming down and fucking this up or or or is this like something that we've like actually run into and this is an issue or what Um then like on the row 81, cached models. What is this thing where we have this cached models? What is this? Are we caching models? There's no m- what is this? We don't have any local And then we have resolved model. We have open AI we just have a function for this? What is going on here? What is that? Route for model. Okay. Yeah, what is what's going on here, man? Um uh shit And then you didn't even run rough on any of this shit. Like, I I don't know if you ran rough on it or not. I um Yeah, can we just like I don't know what you know we're building the payload. We're like, there's so many ifs and different things. Like some things uh again uh and I'm I'm purposefully staying high level because I'm like, okay, you There's a lot of shit where it's just like by the way defend it like defend it with your life if it's if it should be here and then reference some official documentation from somewhere on the internet that's like, yeah, we should have this defensive thing but like a lot of this shit it's like no I mean this just literally uh let's send the headers like w you know what I mean and And if I don't know, are the headers changing every time? If are they are or are they not? Do we need to like send something out to grab it and come back first? Do you know what I mean? I mean if the user agent is changing every time should we like just have it like automatically kinda check and just grab that every time? Like there's a bunch of yeah, there's a bunch of things where it's just and then and then the check models thing. I mean Are we like you you ev you're even including things on here that you you yourself said aren't available. Like you're saying the 3.1 flashlight model isn't available, like why is it here? You're saying the codex spark model isn't available. You're saying the 5.5 low isn't available. Why is it in here? Like, is this is this shit even is the check model script even fucking doing anything? Do we need it? Like do we need it if like what's the point of it if we have the shit already in the client.py? Like we have all the models in here, like what are we doing? Or what do this is what I'm saying, like oh my god. Okay, just",
+  "result" : "Okay, just so I can und it's not so I can understand. so for like the first function. We're just gonna go function by function because I'm like, wait, do we actually need this shit or are you is it just like we're second dick or we're just doing extra shit for no reason? so we're gonna have to defend each of these. Like the first function on row 34, the cash row, what's this? And why do we have this here? I'm because I'm not understanding like yeah I'm not understanding like like what do we actually need here? It's like what do we literally actually need here for the signed headers, like we need to send signed headers, I think, but what is this like again man Man, I the code always is like doing like liter you know why what is this for loop in the in the signed headers thing like do we need this stuff? I mean like literally When I say do we need it, it's like are is this just like protecting against like God coming down and fucking this up or or or is this like something that we've like actually run into and this is an issue or what then like on the row 81, cached models. What is this thing where we have this cached models? What is this? Are we caching models? There's no m- what is this? We don't have any local And then we have resolved model. We have open AI we just have a function for this? What is going on here? What is that? Route for model. Okay. Yeah, what is what's going on here, man? shit And then you didn't even run rough on any of this shit. Like, I I don't know if you ran rough on it or not. I Yeah, can we just like I don't know what you know we're building the payload. We're like, there's so many ifs and different things. Like some things again and I'm I'm purposefully staying high level because I'm like, okay, you There's a lot of shit where it's just like by the way defend it like defend it with your life if it's if it should be here and then reference some official documentation from somewhere on the internet that's like, yeah, we should have this defensive thing but like a lot of this shit it's like no I mean this just literally let's send the headers like w you know what I mean and And if I don't know, are the headers changing every time? If are they are or are they not? Do we need to like send something out to grab it and come back first? Do you know what I mean? I mean if the user agent is changing every time should we like just have it like automatically kinda check and just grab that every time? Like there's a bunch of yeah, there's a bunch of things where it's just and then and then the check models thing. I mean Are we like you you ev you're even including things on here that you you yourself said aren't available. Like you're saying the 3.1 flashlight model isn't available, like why is it here? You're saying the codex spark model isn't available. You're saying the 5.5 low isn't available. Why is it in here? Like, is this is this shit even is the check model script even fucking doing anything? Do we need it? Like do we need it if like what's the point of it if we have the shit already in the client.py? Like we have all the models in here, like what are we doing? Or what do this is what I'm saying, like oh my god. Okay, just",
+  "modeName" : "Voice to text",
+  "segments" : [
+    {
+      "end" : 3.28,
+      "start" : 0.24,
+      "text" : " Okay, just so I can und um it's not so I can understand."
+    },
+    {
+      "end" : 5.28,
+      "start" : 3.28,
+      "text" : " Um so for like the first function."
+    },
+    {
+      "end" : 14.88,
+      "start" : 5.28,
+      "text" : " We're just gonna go function by function because I'm like, wait, do we actually need this shit or are you is it just like we're second dick or we're just doing extra shit for no reason?"
+    },
+    {
+      "end" : 16.460001,
+      "start" : 14.62,
+      "text" : " Um so we're gonna have to defend each of these."
+    },
+    {
+      "end" : 22.46,
+      "start" : 16.460001,
+      "text" : " Like the first function um on row 34, the cash row, what's this?"
+    },
+    {
+      "end" : 24.54,
+      "start" : 22.46,
+      "text" : " And why do we have this here?"
+    },
+    {
+      "end" : 24.86,
+      "start" : 24.54,
+      "text" : " Um"
+    },
+    {
+      "end" : 33.2,
+      "start" : 26.08,
+      "text" : " I'm uh because I'm not understanding like uh yeah I'm not understanding like like what do we actually need here?"
+    },
+    {
+      "end" : 35.68,
+      "start" : 33.2,
+      "text" : " It's like what do we literally actually need here"
+    },
+    {
+      "end" : 43.88,
+      "start" : 35.640003,
+      "text" : " Um for the signed headers, like we need to send signed headers, I think, but what is this like again man uh um"
+    },
+    {
+      "end" : 57,
+      "start" : 46.52,
+      "text" : " Man, I the code always is like doing uh like liter you know why what is this for loop in the in the signed headers thing like do we need this stuff?"
+    },
+    {
+      "end" : 58.600002,
+      "start" : 57,
+      "text" : " I mean like literally"
+    },
+    {
+      "end" : 70.96,
+      "start" : 58.56,
+      "text" : " When I say do we need it, it's like are is this just like protecting against like God coming down and fucking this up or or or is this like something that we've like actually run into and this is an issue or what"
+    },
+    {
+      "end" : 74.42,
+      "start" : 71.22,
+      "text" : " Um then like on the row 81, cached models."
+    },
+    {
+      "end" : 76.5,
+      "start" : 74.42,
+      "text" : " What is this thing where we have this cached models?"
+    },
+    {
+      "end" : 77.22,
+      "start" : 76.5,
+      "text" : " What is this?"
+    },
+    {
+      "end" : 78.340004,
+      "start" : 77.22,
+      "text" : " Are we caching models?"
+    },
+    {
+      "end" : 79.54,
+      "start" : 78.340004,
+      "text" : " There's no m- what is this?"
+    },
+    {
+      "end" : 80.66,
+      "start" : 79.54,
+      "text" : " We don't have any local"
+    },
+    {
+      "end" : 82.24,
+      "start" : 80.560005,
+      "text" : " And then we have resolved model."
+    },
+    {
+      "end" : 85.12,
+      "start" : 82.24,
+      "text" : " We have open AI we just have a function for this?"
+    },
+    {
+      "end" : 86.16,
+      "start" : 85.28,
+      "text" : " What is going on here?"
+    },
+    {
+      "end" : 86.96,
+      "start" : 86.16,
+      "text" : " What is that?"
+    },
+    {
+      "end" : 88.240005,
+      "start" : 86.96,
+      "text" : " Route for model."
+    },
+    {
+      "end" : 88.72,
+      "start" : 88.240005,
+      "text" : " Okay."
+    },
+    {
+      "end" : 91.28,
+      "start" : 88.72,
+      "text" : " Yeah, what is what's going on here, man?"
+    },
+    {
+      "end" : 93.44,
+      "start" : 91.28,
+      "text" : " Um uh shit"
+    },
+    {
+      "end" : 98.119995,
+      "start" : 95.64,
+      "text" : " And then you didn't even run rough on any of this shit."
+    },
+    {
+      "end" : 100.439995,
+      "start" : 98.119995,
+      "text" : " Like, I I don't know if you ran rough on it or not."
+    },
+    {
+      "end" : 106.119995,
+      "start" : 100.439995,
+      "text" : " I um Yeah, can we just like"
+    },
+    {
+      "end" : 110.78001,
+      "start" : 107.66,
+      "text" : " I don't know what you know we're building the payload."
+    },
+    {
+      "end" : 113.100006,
+      "start" : 110.78001,
+      "text" : " We're like, there's so many ifs and different things."
+    },
+    {
+      "end" : 118.94,
+      "start" : 113.100006,
+      "text" : " Like some things uh again uh and I'm I'm purposefully staying high level because I'm like, okay, you"
+    },
+    {
+      "end" : 130.52,
+      "start" : 119.4,
+      "text" : " There's a lot of shit where it's just like by the way defend it like defend it with your life if it's if it should be here and then reference some official documentation from somewhere on the internet that's like, yeah, we should have this"
+    },
+    {
+      "end" : 141.28,
+      "start" : 130.56,
+      "text" : " defensive thing but like a lot of this shit it's like no I mean this just literally uh let's send the headers like w you know what I mean and"
+    },
+    {
+      "end" : 145.18,
+      "start" : 142.29999,
+      "text" : " And if I don't know, are the headers changing every time?"
+    },
+    {
+      "end" : 146.54,
+      "start" : 145.18,
+      "text" : " If are they are or are they not?"
+    },
+    {
+      "end" : 149.98,
+      "start" : 146.54,
+      "text" : " Do we need to like send something out to grab it and come back first?"
+    },
+    {
+      "end" : 150.93999,
+      "start" : 150.14,
+      "text" : " Do you know what I mean?"
+    },
+    {
+      "end" : 157.73999,
+      "start" : 150.93999,
+      "text" : " I mean if the user agent is changing every time should we like just have it like automatically kinda check and just grab that every time?"
+    },
+    {
+      "end" : 163.42,
+      "start" : 157.73999,
+      "text" : " Like there's a bunch of yeah, there's a bunch of things where it's just and then and then the check models thing."
+    },
+    {
+      "end" : 164.37999,
+      "start" : 163.42,
+      "text" : " I mean"
+    },
+    {
+      "end" : 172.72,
+      "start" : 165.2,
+      "text" : " Are we like you you ev you're even including things on here that you you yourself said aren't available."
+    },
+    {
+      "end" : 173.76,
+      "start" : 172.72,
+      "text" : " Like you're saying the 3."
+    },
+    {
+      "end" : 176.87999,
+      "start" : 173.76,
+      "text" : "1 flashlight model isn't available, like why is it here?"
+    },
+    {
+      "end" : 178.76001,
+      "start" : 176.6,
+      "text" : " You're saying the codex spark model isn't available."
+    },
+    {
+      "end" : 179.56001,
+      "start" : 178.76001,
+      "text" : " You're saying the 5."
+    },
+    {
+      "end" : 180.84001,
+      "start" : 179.56001,
+      "text" : "5 low isn't available."
+    },
+    {
+      "end" : 182.28,
+      "start" : 180.84001,
+      "text" : " Why is it in here?"
+    },
+    {
+      "end" : 186.92001,
+      "start" : 182.28,
+      "text" : " Like, is this is this shit even is the check model script even fucking doing anything?"
+    },
+    {
+      "end" : 188.20001,
+      "start" : 186.92001,
+      "text" : " Do we need it?"
+    },
+    {
+      "end" : 192.86,
+      "start" : 188.06,
+      "text" : " Like do we need it if like what's the point of it if we have the shit already in the client."
+    },
+    {
+      "end" : 193.57999,
+      "start" : 193.09999,
+      "text" : "py?"
+    },
+    {
+      "end" : 196.37999,
+      "start" : 193.57999,
+      "text" : " Like we have all the models in here, like what are we doing?"
+    },
+    {
+      "end" : 200.29999,
+      "start" : 196.37999,
+      "text" : " Or what do this is what I'm saying, like oh my god."
+    },
+    {
+      "end" : 201.18,
+      "start" : 200.29999,
+      "text" : " Okay, just"
+    }
+  ],
+  "processingTime" : 3514
+}

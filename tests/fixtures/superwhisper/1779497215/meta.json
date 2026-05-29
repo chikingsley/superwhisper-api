@@ -1,0 +1,60 @@
+{
+  "realtimeEnabled" : false,
+  "modeName" : "Default",
+  "speakers" : [
+
+  ],
+  "languageModelName" : "",
+  "datetime" : "2026-05-23T00:46:55",
+  "separateSpeakersEnabled" : false,
+  "translationEnabled" : false,
+  "result" : "تشنگه تند",
+  "applicationContextEnabled" : false,
+  "languageSelected" : "auto",
+  "recordingDevice" : "",
+  "rawResult" : "تشنگه تند",
+  "appVersion" : "2.14.0",
+  "processingTime" : 660,
+  "prompt" : "",
+  "modelKey" : "sw-elevenlabs-scribe",
+  "languageModelKey" : "",
+  "promptContext" : {
+    "userContext" : {
+
+    },
+    "modeContext" : {
+      "language" : "en",
+      "examples" : [
+
+      ],
+      "type" : "custom"
+    },
+    "applicationContext" : {
+      "includeInPrompt" : false,
+      "name" : "Safari",
+      "nouns" : [
+
+      ]
+    },
+    "systemContext" : {
+      "language" : "en",
+      "time" : ""
+    }
+  },
+  "segments" : [
+    {
+      "text" : "تشنگه",
+      "start" : 0.519,
+      "end" : 1.019
+    },
+    {
+      "text" : "تند",
+      "start" : 1.039,
+      "end" : 1.36
+    }
+  ],
+  "systemAudioEnabled" : false,
+  "duration" : 1536,
+  "modelName" : "Scribe (Cloud)",
+  "literalPunctuationEnabled" : false
+}
