@@ -9,6 +9,7 @@ import httpx
 import uvicorn
 from fastapi import FastAPI, File, Form, Header, HTTPException, UploadFile
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 
 from superwhisper_api.audio.models import audio_model
 from superwhisper_api.auth import ensure_elevenlabs_key
@@ -18,36 +19,47 @@ DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 8766
 
 
-def _openai_verbose_response(data: dict[str, Any], language: str | None) -> dict[str, Any]:
-    """Return the verbose transcription shape MacWhisper accepts."""
+class Segment(BaseModel):
+    """One transcript segment in the verbose-JSON shape MacWhisper expects."""
+
+    id: int = 0
+    seek: int = 0
+    start: float = 0.0
+    end: float = 0.0
+    text: str = ""
+    tokens: list[int] = []
+    temperature: float = 0.0
+    avg_logprob: float = 0.0
+    compression_ratio: float = 1.0
+    no_speech_prob: float = 0.0
+
+
+class VerboseTranscription(BaseModel):
+    """The OpenAI verbose-JSON transcription response MacWhisper consumes."""
+
+    task: str = "transcribe"
+    language: str = "unknown"
+    duration: float = 0.0
+    text: str = ""
+    segments: list[Segment] = []
+
+
+def _openai_verbose_response(data: dict[str, Any], language: str | None) -> VerboseTranscription:
+    """Build the verbose transcription response MacWhisper accepts."""
     text = str(data.get("text") or "")
-    duration = data.get("audio_duration_secs") or data.get("duration") or 0.0
+    duration = float(data.get("audio_duration_secs") or data.get("duration") or 0.0)
     language_code = data.get("language_code") or language or "unknown"
 
-    segments: list[dict[str, Any]] = []
+    segments: list[Segment] = []
     if text:
-        segments.append(
-            {
-                "id": 0,
-                "seek": 0,
-                "start": 0.0,
-                "end": float(duration or 0.0),
-                "text": text,
-                "tokens": [],
-                "temperature": 0.0,
-                "avg_logprob": 0.0,
-                "compression_ratio": 1.0,
-                "no_speech_prob": 0.0,
-            }
-        )
+        segments.append(Segment(id=0, start=0.0, end=duration, text=text))
 
-    return {
-        "task": "transcribe",
-        "language": language_code,
-        "duration": duration,
-        "text": text,
-        "segments": segments,
-    }
+    return VerboseTranscription(
+        language=language_code,
+        duration=duration,
+        text=text,
+        segments=segments,
+    )
 
 
 def _require_token(authorization: str | None, expected_token: str | None) -> None:
@@ -101,7 +113,7 @@ def create_app(*, proxy_token: str | None = None) -> FastAPI:
         if response.status_code >= 400:
             raise HTTPException(status_code=response.status_code, detail=response.text)
 
-        return JSONResponse(_openai_verbose_response(response.json(), language))
+        return JSONResponse(_openai_verbose_response(response.json(), language).model_dump())
 
     return app
 
