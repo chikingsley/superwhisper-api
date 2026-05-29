@@ -1,14 +1,14 @@
 """Audio model specifications for cloud transcription providers."""
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import Literal
+
+from pydantic import BaseModel
 
 AudioProvider = Literal["elevenlabs", "deepgram", "s1", "ultra"]
 
 
-@dataclass(frozen=True)
-class AudioModelSpec:
+class AudioModelSpec(BaseModel, frozen=True):
     """Describes a cloud audio transcription model and its provider."""
 
     key: str

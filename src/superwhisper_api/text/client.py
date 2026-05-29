@@ -3,11 +3,11 @@ from __future__ import annotations
 
 import json
 from collections.abc import Iterable, Mapping
-from dataclasses import dataclass
 from typing import Any
 
 import httpx
 from jsonschema import validate
+from pydantic import BaseModel
 
 from superwhisper_api.auth import cached_auth
 from superwhisper_api.text.models import ModelSpec, model_spec
@@ -15,8 +15,7 @@ from superwhisper_api.text.models import ModelSpec, model_spec
 Message = Mapping[str, str]
 
 
-@dataclass(frozen=True)
-class ModelResponse:
+class ModelResponse(BaseModel):
     """Structured response from a model generation call."""
 
     text: str
@@ -25,8 +24,8 @@ class ModelResponse:
     status_code: int
     events: list[dict[str, Any]]
 
-    def json(self) -> Any:
-        """Parse the response text as JSON."""
+    def parsed(self) -> Any:
+        """Parse the response text as JSON (stripping any markdown fences)."""
         return parse_json_text(self.text)
 
 
@@ -100,7 +99,7 @@ class SuperwhisperClient:
             max_tokens=max_tokens,
             response_format=response_format,
         )
-        parsed = response.json()
+        parsed = response.parsed()
         if schema:
             validate(instance=parsed, schema=schema)
         return parsed

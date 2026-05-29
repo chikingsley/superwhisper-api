@@ -1,14 +1,14 @@
 """Superwhisper text model specifications."""
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import Literal
+
+from pydantic import BaseModel
 
 Provider = Literal["openai", "anthropic", "gemini"]
 
 
-@dataclass(frozen=True)
-class ModelSpec:
+class ModelSpec(BaseModel, frozen=True):
     """Describes a Superwhisper text model and its API routing details."""
 
     key: str

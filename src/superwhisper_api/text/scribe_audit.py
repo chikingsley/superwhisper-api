@@ -274,7 +274,7 @@ def _process_audit_row(
                     model,
                     [{"role": "user", "content": prompt}],
                 )
-                classification = response.json()
+                classification = response.parsed()
 
             category = str(classification.get("category", ""))
             if category not in SCRIBE_AUDIT_CATEGORIES:

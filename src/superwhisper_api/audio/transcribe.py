@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any, Protocol
 
 import httpx
+from pydantic import BaseModel
 
 from superwhisper_api.audio.models import AudioModelSpec, audio_model
 from superwhisper_api.auth import (
@@ -41,8 +42,7 @@ def superwhisper_datetime() -> str:
     return datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
 
 
-@dataclass(frozen=True)
-class Transcript:
+class Transcript(BaseModel, frozen=True):
     """Normalized transcription result plus the raw provider response."""
 
     audio_path: str
@@ -72,8 +72,7 @@ class Transcript:
         }
 
 
-@dataclass(frozen=True)
-class Failure:
+class Failure(BaseModel, frozen=True):
     """Failed transcription attempt metadata."""
 
     audio_path: str
