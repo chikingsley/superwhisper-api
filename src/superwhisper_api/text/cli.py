@@ -6,17 +6,14 @@ import hashlib
 import json
 import sys
 from collections.abc import Callable, Iterator
-from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
+from superwhisper_api.batch import bounded_map
 from superwhisper_api.text.client import SuperwhisperClient
 from superwhisper_api.text.scribe_audit import _build_scribe_audit_parser, _cmd_scribe_audit
-
-if TYPE_CHECKING:
-    from concurrent.futures import Future
 
 
 @dataclass(frozen=True)
@@ -225,44 +222,6 @@ def _run_single(prompt: str, generate: GenerateFn) -> int:
     return 1 if isinstance(record, TextFailure) else 0
 
 
-def _submit_next(
-    pool: ThreadPoolExecutor,
-    pending_prompts: Iterator[str],
-    futures: set[Future[TextRecord]],
-    generate: GenerateFn,
-    submitted_ref: list[int],
-) -> bool:
-    """Pull the next prompt and submit it to the worker pool."""
-    try:
-        prompt = next(pending_prompts)
-    except StopIteration:
-        return False
-    futures.add(pool.submit(generate, prompt))
-    submitted_ref[0] += 1
-    return True
-
-
-def _handle_done(
-    done: set[Future[TextRecord]],
-    jsonl: Path,
-    fail_jsonl: Path | None,
-    counters: list[int],
-) -> None:
-    """Write completed batch records and update counters."""
-    for future in done:
-        record = future.result()
-        if isinstance(record, TextFailure):
-            counters[1] += 1
-            if fail_jsonl:
-                _write_text_record(fail_jsonl, record)
-            print(f"FAIL {record.prompt_hash}: {record.error}", file=sys.stderr)
-        else:
-            counters[0] += 1
-            _write_text_record(jsonl, record)
-            snippet = record.text[:80].replace("\n", " ")
-            print(f"OK {record.prompt_hash}: {snippet}", file=sys.stderr)
-
-
 def _run_batch(
     prompts_file: Path,
     jsonl: Path,
@@ -270,40 +229,28 @@ def _run_batch(
     max_workers: int,
     generate: GenerateFn,
 ) -> int:
-    """Generate all pending prompts from a batch file."""
-    prompts_file = prompts_file.expanduser()
-    if not prompts_file.exists():
-        print(f"Prompts file not found: {prompts_file}", file=sys.stderr)
-        return 1
+    """Generate text for all pending prompts and write results to JSONL."""
+    ok = 0
+    failed = 0
+    for _prompt, record in bounded_map(
+        _iter_pending(prompts_file, jsonl), generate, max_workers=max_workers
+    ):
+        if isinstance(record, TextFailure):
+            failed += 1
+            if fail_jsonl:
+                _write_jsonl(fail_jsonl, record.as_dict())
+            print(f"FAIL {record.prompt_hash}: {record.error}", file=sys.stderr)
+        else:
+            ok += 1
+            _write_jsonl(jsonl, record.as_dict())
+            snippet = record.text[:80].replace(chr(10), " ")
+            print(f"OK {record.prompt_hash}: {snippet}", file=sys.stderr)
 
-    pending = _iter_pending(prompts_file, jsonl)
-    submitted = [0]
-    counters = [0, 0]
-    max_in_flight = max(max_workers * 4, max_workers)
-
-    with ThreadPoolExecutor(max_workers=max_workers) as pool:
-        futures: set[Future[TextRecord]] = set()
-        while len(futures) < max_in_flight and _submit_next(
-            pool, pending, futures, generate, submitted
-        ):
-            pass
-        if not futures:
-            print("No pending prompts.", file=sys.stderr)
-            return 0
-
-        while futures:
-            done, futures = wait(futures, return_when=FIRST_COMPLETED)
-            _handle_done(done, jsonl, fail_jsonl, counters)
-            while len(futures) < max_in_flight and _submit_next(
-                pool, pending, futures, generate, submitted
-            ):
-                pass
-
-    print(
-        f"Done: {counters[0]} ok, {counters[1]} failed, {submitted[0]} submitted",
-        file=sys.stderr,
-    )
-    return 0 if counters[1] == 0 else 1
+    if ok == 0 and failed == 0:
+        print("No pending prompts.", file=sys.stderr)
+        return 0
+    print(f"Done: {ok} ok, {failed} failed, {ok + failed} submitted", file=sys.stderr)
+    return 0
 
 
 def _cmd_generate(args: argparse.Namespace) -> int:

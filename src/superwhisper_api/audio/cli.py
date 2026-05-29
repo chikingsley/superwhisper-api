@@ -11,7 +11,6 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -22,10 +21,10 @@ from superwhisper_api.audio.transcribe import (
     create_process_fn,
     warn_if_key_ignored,
 )
+from superwhisper_api.batch import bounded_map
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
-    from concurrent.futures import Future
 
 
 def _written_audio_paths(path: Path) -> set[str]:
@@ -148,46 +147,6 @@ def _run_single(
     return 0
 
 
-def _submit_next(
-    pool: ThreadPoolExecutor,
-    pending_paths: Iterator[Path],
-    futures: set[Future[TranscriptResult]],
-    process: ProcessFn,
-    submitted_ref: list[int],
-) -> bool:
-    """Pull the next audio path and submit it to the thread pool."""
-    try:
-        audio = next(pending_paths)
-    except StopIteration:
-        return False
-    futures.add(pool.submit(process, audio))
-    submitted_ref[0] += 1
-    return True
-
-
-def _handle_done(
-    done: set[Future[TranscriptResult]],
-    jsonl: Path,
-    fail_jsonl: Path | None,
-    counters: list[int],
-) -> None:
-    """Process completed futures and write results.  counters = [ok, fail]."""
-    for fut in done:
-        t = fut.result()
-        error = getattr(t, "error", "")
-        if error:
-            counters[1] += 1
-            if fail_jsonl:
-                _write_jsonl(fail_jsonl, t)
-            print(f"FAIL {t.audio_path}: {error}", file=sys.stderr)
-        else:
-            counters[0] += 1
-            _write_jsonl(jsonl, t)
-            transcript_text = getattr(t, "transcript", "")
-            snippet = transcript_text[:80].replace("\n", " ")
-            print(f"OK {t.audio_path}: {snippet}", file=sys.stderr)
-
-
 def _run_batch(
     paths_file: Path,
     jsonl: Path,
@@ -200,33 +159,27 @@ def _run_batch(
         print(f"Paths file not found: {paths_file}", file=sys.stderr)
         return 1
 
-    pending = _iter_pending(paths_file, jsonl)
-    submitted = [0]
-    counters = [0, 0]  # [ok, fail]
-    max_in_flight = max(max_workers * 4, max_workers)
+    ok = 0
+    failed = 0
+    for _audio, t in bounded_map(
+        _iter_pending(paths_file, jsonl), process, max_workers=max_workers
+    ):
+        error = getattr(t, "error", "")
+        if error:
+            failed += 1
+            if fail_jsonl:
+                _write_jsonl(fail_jsonl, t)
+            print(f"FAIL {t.audio_path}: {error}", file=sys.stderr)
+        else:
+            ok += 1
+            _write_jsonl(jsonl, t)
+            snippet = getattr(t, "transcript", "")[:80].replace("\n", " ")
+            print(f"OK {t.audio_path}: {snippet}", file=sys.stderr)
 
-    with ThreadPoolExecutor(max_workers=max_workers) as pool:
-        futures: set[Future[TranscriptResult]] = set()
-        while len(futures) < max_in_flight and _submit_next(
-            pool, pending, futures, process, submitted
-        ):
-            pass
-        if not futures:
-            print("No pending audio files.", file=sys.stderr)
-            return 0
-
-        while futures:
-            done, futures = wait(futures, return_when=FIRST_COMPLETED)
-            _handle_done(done, jsonl, fail_jsonl, counters)
-            while len(futures) < max_in_flight and _submit_next(
-                pool, pending, futures, process, submitted
-            ):
-                pass
-
-    print(
-        f"Done: {counters[0]} ok, {counters[1]} failed, {submitted[0]} submitted",
-        file=sys.stderr,
-    )
+    if ok == 0 and failed == 0:
+        print("No pending audio files.", file=sys.stderr)
+        return 0
+    print(f"Done: {ok} ok, {failed} failed, {ok + failed} submitted", file=sys.stderr)
     return 0
 
 
