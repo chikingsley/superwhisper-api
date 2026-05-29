@@ -1,6 +1,5 @@
 .DS_Store
 .env
-data/
 __pycache__/
 .ruff_cache/
 .pytest_cache/
@@ -10,3 +9,4 @@ __pycache__/
 *.sqlite
 *.sqlite-shm
 *.sqlite-wal
+src/superwhisper_api/audio/projects/*/data/

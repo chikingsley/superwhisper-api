@@ -6,14 +6,19 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.136.3",
+    "huggingface-hub>=1.17.0",
     "httpx>=0.28.1",
+    "jiwer>=3.1.0",
     "jsonschema>=4.25.1",
     "python-multipart>=0.0.29",
+    "tajiknlp>=1.2.0",
     "uvicorn>=0.48.0",
 ]
 
 [project.scripts]
 superwhisper-audio = "superwhisper_api.audio.cli:main"
+superwhisper-persian-fleurs = "superwhisper_api.audio.projects.persian.cli:main"
+superwhisper-tajikistan-fleurs = "superwhisper_api.audio.projects.tajikistan.cli:main"
 superwhisper-macwhisper = "superwhisper_api.macwhisper.cli:main"
 superwhisper-macwhisper-proxy = "superwhisper_api.macwhisper.proxy:main"
 superwhisper-new-model-inspect = "superwhisper_api.new_model_inspect:main"
@@ -68,6 +73,7 @@ extend-select = [
 "archive/**/*.py" = ["C901", "D100", "D101", "D102", "D103", "D104", "D107"]
 "tests/**/*.py" = ["D100", "D101", "D102", "D103", "D104", "D107"]
 "scripts/**/*.py" = ["D100", "D101", "D102", "D103", "D104", "D107", "E501", "F541", "RUF010"]
+"src/superwhisper_api/audio/projects/*/normalizer.py" = ["RUF001"]
 
 [tool.ty.src]
 exclude = ["archive"]
