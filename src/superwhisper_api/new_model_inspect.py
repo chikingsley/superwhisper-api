@@ -21,6 +21,7 @@ import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 import httpx
 
@@ -228,11 +229,11 @@ _HEADER_INDICATORS = frozenset({
 })
 
 
-def _looks_like_headers(d: dict[str, object]) -> bool:
+def _looks_like_headers(d: dict[Any, Any]) -> bool:
     return bool({str(k) for k in d} & _HEADER_INDICATORS)
 
 
-def _extract_header_dict(d: dict[str, object]) -> dict[str, str]:
+def _extract_header_dict(d: dict[Any, Any]) -> dict[str, str]:
     result: dict[str, str] = {}
     for k, v in d.items():
         if isinstance(v, str):
@@ -497,17 +498,17 @@ def _suggest_code(results: list[dict[str, object]]) -> list[dict[str, object]]:
     lang_missing: dict[str, dict[str, object]] = {}
 
     for r in results:
-        known = r.get("known", {})
-        rec = r.get("recording", {})
-        probe = r.get("probe")
+        known: Any = r.get("known", {})
+        rec: Any = r.get("recording", {})
+        probe: Any = r.get("probe")
 
         if not known.get("audio_model"):
-            audio_key = rec.get("model_key", "")
+            audio_key = str(rec.get("model_key", "") or "")
             if audio_key:
                 audio_missing.add(audio_key)
 
         if not known.get("language_model"):
-            lang_key = rec.get("language_model_key", "")
+            lang_key = str(rec.get("language_model_key", "") or "")
             if lang_key and probe and probe.get("probed"):
                 lang_missing[lang_key] = probe
             elif lang_key:
