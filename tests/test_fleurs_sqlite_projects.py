@@ -4,7 +4,7 @@ import json
 import tarfile
 from typing import TYPE_CHECKING, cast
 
-from superwhisper_api.audio.projects.fleurs_sqlite import (
+from superwhisper_api.audio.projects.fleurs import (
     FleursProject,
     audit_scribe_results,
     connect,

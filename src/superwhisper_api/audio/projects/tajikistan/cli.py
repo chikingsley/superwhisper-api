@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from superwhisper_api.audio.projects.fleurs_sqlite import FleursProject, dispatch
+from superwhisper_api.audio.projects.fleurs import FleursProject, dispatch
 from superwhisper_api.audio.projects.tajikistan.normalizer import maybe_normalize
 
 PROJECT_DIR = Path(__file__).resolve().parent
