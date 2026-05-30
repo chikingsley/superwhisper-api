@@ -108,6 +108,12 @@ def _build_parser() -> argparse.ArgumentParser:
     p.add_argument("--model", default="scribe-v2", help="Model key (default: scribe-v2)")
     p.add_argument("--language", help="Language code hint (e.g. fas, eng)")
     p.add_argument(
+        "--diarize",
+        action="store_true",
+        help="Request speaker diarization (elevenlabs/deepgram only; ignored otherwise). "
+        "Speaker labels appear in the raw_response.",
+    )
+    p.add_argument(
         "--max-workers",
         type=int,
         default=4,
@@ -197,7 +203,9 @@ def main() -> int:
 
     warn_if_key_ignored(spec.provider, args.key)
     try:
-        process = create_process_fn(spec, args.key, language=args.language)
+        process = create_process_fn(
+            spec, args.key, language=args.language, diarize=args.diarize
+        )
     except ValueError as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 1

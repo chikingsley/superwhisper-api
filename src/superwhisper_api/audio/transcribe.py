@@ -118,6 +118,7 @@ def transcribe_file(
     extract_recording_id: TranscriptFn,
     api_key: str | None = None,
     ensure_key: KeyFn | None = None,
+    diarize: bool = False,
 ) -> TranscriptResult:
     """Transcribe audio through a provider, handling timing and error wrapping."""
     started = time.monotonic()
@@ -126,9 +127,9 @@ def transcribe_file(
         spec = audio_model(model)
 
         if key:
-            data = transcribe_raw(audio, key, model=model, language=language)
+            data = transcribe_raw(audio, key, model=model, language=language, diarize=diarize)
         else:
-            data = transcribe_raw(audio, model=model, language=language)
+            data = transcribe_raw(audio, model=model, language=language, diarize=diarize)
 
         elapsed_ms = int((time.monotonic() - started) * 1000)
         return Transcript(
@@ -156,6 +157,7 @@ def _elevenlabs_raw(
     *,
     model: str = "scribe-v2",
     language: str | None = None,
+    diarize: bool = False,
 ) -> dict[str, Any]:
     model_id = audio_model(model).model_id
     headers = {
@@ -171,6 +173,9 @@ def _elevenlabs_raw(
         }
         if language:
             files["language_code"] = (None, language)
+        if diarize:
+            # Scribe tags each entry in words[] with a speaker_id when enabled.
+            files["diarize"] = (None, "true")
         response = httpx.post(ELEVENLABS_URL, headers=headers, files=files, timeout=600)
         response.raise_for_status()
         return response.json()
@@ -197,6 +202,7 @@ def _deepgram_raw(
     *,
     model: str = "deepgram-nova-2",
     language: str | None = None,
+    diarize: bool = False,
 ) -> dict[str, Any]:
     model_id = audio_model(model).model_id
     headers = {
@@ -207,6 +213,9 @@ def _deepgram_raw(
     params: dict[str, str] = {"model": model_id}
     if language:
         params["language"] = language
+    if diarize:
+        # Deepgram adds a per-word integer `speaker` field when enabled.
+        params["diarize"] = "true"
     with audio.open("rb") as handle:
         response = httpx.post(
             DEEPGRAM_PROXY_URL,
@@ -252,7 +261,10 @@ def _s1_raw(
     *,
     model: str = "s1-voice",
     language: str | None = None,
+    diarize: bool = False,
 ) -> dict[str, Any]:
+    # S1 has no diarization support; the flag is accepted but ignored.
+    del diarize
     audio_model(model)
     with audio.open("rb") as handle:
         audio_b64 = base64.b64encode(handle.read()).decode()
@@ -289,7 +301,10 @@ def _ultra_raw(
     *,
     model: str = "ultra",
     language: str | None = None,
+    diarize: bool = False,
 ) -> dict[str, Any]:
+    # Ultra has no diarization support; the flag is accepted but ignored.
+    del diarize
     audio_model(model)
     with audio.open("rb") as handle:
         audio_b64 = base64.b64encode(handle.read()).decode()
@@ -336,6 +351,7 @@ class _Provider:
     extract_duration: DurationFn
     extract_recording_id: TranscriptFn
     ensure_key: KeyFn | None = None
+    supports_diarization: bool = False
 
 
 PROVIDERS: dict[str, _Provider] = {
@@ -345,12 +361,14 @@ PROVIDERS: dict[str, _Provider] = {
         _elevenlabs_duration,
         _elevenlabs_recording_id,
         ensure_key=ensure_elevenlabs_key,
+        supports_diarization=True,
     ),
     "deepgram": _Provider(
         _deepgram_raw,
         _deepgram_transcript,
         _deepgram_duration,
         _deepgram_recording_id,
+        supports_diarization=True,
     ),
     "s1": _Provider(
         _s1_raw,
@@ -387,11 +405,20 @@ def create_process_fn(
     spec: AudioModelSpec,
     key: str | None,
     language: str | None = None,
+    diarize: bool = False,
 ) -> ProcessFn:
     """Return a transcription function bound to the provider, key, and language."""
     provider = PROVIDERS.get(spec.provider)
     if provider is None:
         raise ValueError(f"Unsupported provider '{spec.provider}' for model '{spec.key}'")
+
+    if diarize and not provider.supports_diarization:
+        print(
+            f"Warning: diarization is not supported for provider '{spec.provider}'; "
+            "transcribing without speaker labels",
+            file=sys.stderr,
+        )
+        diarize = False
 
     def process(audio: Path) -> TranscriptResult:
         return transcribe_file(
@@ -405,6 +432,7 @@ def create_process_fn(
             extract_recording_id=provider.extract_recording_id,
             api_key=key,
             ensure_key=provider.ensure_key,
+            diarize=diarize,
         )
 
     return process
